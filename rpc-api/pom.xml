@@ -8,5 +8,11 @@
     <artifactId>rpc-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <parent>
+        <groupId>groupId</groupId>
+        <artifactId>G-RPC-Framework</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
 
 </project>
