@@ -1,5 +1,6 @@
-package com.g.rpc.entity;
+package com.g.rpc.handler;
 
+import com.g.rpc.entity.RPCRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;

@@ -1,4 +1,4 @@
-package com.g.rpc.entity;
+package com.g.rpc.registry;
 
 public interface ServiceRegistry {
     <T> void register(T service);

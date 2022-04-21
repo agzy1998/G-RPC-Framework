@@ -1,4 +1,4 @@
-package com.g.rpc.entity;
+package com.g.rpc.registry;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,11 +11,11 @@ public class DefaultServiceRegistry implements ServiceRegistry {
     /**
      * 存放Service, 用于get
      */
-    private final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
+    private static final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
     /**
      * 注册Service, 避免重复注册
      */
-    private final Set<String> registeredService = ConcurrentHashMap.newKeySet();
+    private static final Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
     @Override
     public synchronized <T> void register(T service) {
