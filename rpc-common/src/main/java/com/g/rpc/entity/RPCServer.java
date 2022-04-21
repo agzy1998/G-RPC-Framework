@@ -9,14 +9,20 @@ import java.util.concurrent.*;
 
 @Slf4j
 public class RPCServer {
+    private final int corePoolSize = 5;
+    private final int maxPoolSize = 50;
+    private final long keepAliveTime = 60;
+    private final BlockingQueue<Runnable> workingQueue;
+    private final ThreadFactory threadFactory;
     private final ExecutorService threadPool;
+    private final ServiceRegistry serviceRegistry;
+    private final RequestHandler requestHandler;
 
-    public RPCServer(){
-        int corePoolSize = 5;
-        int maxPoolSize = 50;
-        long keepAliveTime = 60;
-        BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<>(100);
-        ThreadFactory threadFactory = Executors.defaultThreadFactory();
+    public RPCServer(ServiceRegistry serviceRegistry){
+        this.serviceRegistry = serviceRegistry;
+        workingQueue = new ArrayBlockingQueue<>(100);
+        threadFactory = Executors.defaultThreadFactory();
+        requestHandler = new RequestHandler();
         threadPool = new ThreadPoolExecutor(corePoolSize,
                 maxPoolSize,
                 keepAliveTime,
@@ -25,14 +31,15 @@ public class RPCServer {
                 threadFactory);
     }
 
-    public void register(Object service, int port){
+    public void start(int port){
         try (ServerSocket serverSocket = new ServerSocket(port)){
             log.info("服务器正在启动....");
             Socket socket;
             while((socket = serverSocket.accept()) != null){
                 log.info("客户端连接成功! IP: " + socket.getInetAddress());
-                threadPool.execute(new Task(socket, service));
+                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceRegistry));
             }
+            threadPool.shutdown();
         } catch (IOException e) {
             e.printStackTrace();
         }
