@@ -21,7 +21,7 @@ public class CommonDecoder extends ReplayingDecoder {
             return ;
         }
         int packageCode = byteBuf.readInt();
-        Class<?> packageClass;
+        Class packageClass;
         if(packageCode == 0){
             packageClass = RPCRequest.class;
         }else if(packageCode == 1){
@@ -39,7 +39,6 @@ public class CommonDecoder extends ReplayingDecoder {
         int length = byteBuf.readInt();
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
-        log.info(String.valueOf(packageClass));
         Object obj = serializer.deserialize(bytes, packageClass);
         list.add(obj);
     }

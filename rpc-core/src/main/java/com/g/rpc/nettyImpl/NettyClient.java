@@ -66,7 +66,7 @@ public class NettyClient implements RPCClient {
                 });
                 // 上述writeAndFlush会另起一个子线程进行, 下述语句会阻塞当前线程, 直到子线程执行完毕
                 channel.closeFuture().sync();
-                // ???
+                // 获得给定的AtributeKey的值, 不会为空, 但可能返回没有值的Attribute, 只有调用get()才能获得其内部值
                 AttributeKey<RPCResponse> key = AttributeKey.valueOf("rpcResponse");
                 RPCResponse rpcResponse = channel.attr(key).get();
                 return rpcResponse;

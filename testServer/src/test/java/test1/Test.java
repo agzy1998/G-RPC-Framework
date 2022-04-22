@@ -1,34 +1,50 @@
 package test1;
 
+import com.alibaba.fastjson.JSON;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
 public class Test {
-    public static void main(String[] args) {
-        Test test = new Test();
-        Son son = new Son();
-        Sing sing = son;
-        Dance dance = son;
-        sing.sing();
-        dance.dance();
+    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        User user1 = new User("123", "zhangsan");
+        byte[] bytes = JSON.toJSONString(user1).getBytes();
+        UserEnhancer userEnhancer = new UserEnhancer(user1);
+        User user = (User) userEnhancer.getProxy(User.class);
+        user.out("asdfsa", "dsafa");
     }
 }
 
-interface Sing{
-    void sing();
-}
-interface Dance{
-    void dance();
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class User{
+    String id;
+    String name;
+
+    public void out(String id, String name){
+        System.out.println(id +" : " +name);
+    }
 }
 
-class Son implements Sing, Dance{
-    String id = "1";
-    String name = "2";
+class UserEnhancer implements InvocationHandler{
+    private final Object target;
 
-    @Override
-    public void sing() {
-        System.out.println("son sing now");
+    UserEnhancer(Object target) {
+        this.target = target;
     }
 
+    public Object getProxy(Class clazz){
+        return Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, this);
+    }
     @Override
-    public void dance() {
-        System.out.println("son dance now");
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println(1);
+        return method.invoke(target, args);
     }
 }

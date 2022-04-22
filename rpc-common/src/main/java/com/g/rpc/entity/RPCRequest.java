@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RPCRequest implements Serializable {
+public class RPCRequest implements Serializable{
     /**
      * 待调用接口名称
      */
@@ -30,5 +30,5 @@ public class RPCRequest implements Serializable {
     /**
      * 调用方法的参数类型
      */
-    private Class<?>[] paramTypes;
+    private Class[] paramTypes;
 }

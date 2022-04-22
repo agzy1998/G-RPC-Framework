@@ -1,3 +1,5 @@
+package server;
+
 import com.g.rpc.api.HelloObject;
 import com.g.rpc.api.HelloService;
 import lombok.extern.slf4j.Slf4j;

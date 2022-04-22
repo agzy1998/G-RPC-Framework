@@ -1,3 +1,5 @@
+package client;
+
 import com.g.rpc.api.HelloObject;
 import com.g.rpc.api.HelloService;
 import com.g.rpc.entity.RPCClient;

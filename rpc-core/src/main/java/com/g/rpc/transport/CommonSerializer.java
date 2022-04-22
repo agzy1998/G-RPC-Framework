@@ -1,9 +1,9 @@
 package com.g.rpc.transport;
 
 public interface CommonSerializer {
-    byte[] serialize(Object obj);
+    <T> byte[] serialize(T obj);
 
-    Object deserialize(byte[] bytes, Class<?> clazz);
+    <T> T deserialize(byte[] bytes, Class<T> clazz);
 
     int getCode();
 
