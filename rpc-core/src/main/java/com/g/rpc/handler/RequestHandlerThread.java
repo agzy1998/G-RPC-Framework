@@ -10,6 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Socket实现时, 需自己配置线程池, 该类只在Socket实现类中使用
+ */
 @Slf4j
 public class RequestHandlerThread implements Runnable{
 

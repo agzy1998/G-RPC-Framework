@@ -19,27 +19,27 @@ import lombok.extern.slf4j.Slf4j;
 public class NettyClient implements RPCClient {
 
     private String host;
-
     private int port;
+    /**
+     * 客户端引导启动类
+     */
     public static final Bootstrap bootstrap;
-
-
-    public NettyClient() {
-    }
 
     public NettyClient(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
-
+    /**
+     *  静态代码块优先级最高, 静态代码块与静态变量按照声明顺序装载
+     *  都是套接字channel, 故SocketChannel
+     */
     static {
         EventLoopGroup group = new NioEventLoopGroup();
         bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
-                .handler(new ChannelInitializer<SocketChannel>() {
-
+                .handler(new ChannelInitializer<SocketChannel>(){
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
@@ -54,7 +54,7 @@ public class NettyClient implements RPCClient {
     public Object sendRequest(final RPCRequest rpcRequest) {
         try {
             ChannelFuture future = bootstrap.connect(host, port).sync();
-            log.info("客户端连接到服务器{}:{}", host, port);
+            log.info("客户端连接到服务器 {}:{} ", host, port);
             Channel channel = future.channel();
             if(channel != null){
                 channel.writeAndFlush(rpcRequest).addListener(future1 ->{

@@ -24,14 +24,14 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RPCRequest> 
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RPCRequest rpcRequest) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, RPCRequest rpcRequest) throws Exception {
         try{
             log.info("服务器接收到请求: {} ", rpcRequest);
             String interfaceName = rpcRequest.getInterfaceName();
             Object service = serviceRegistry.getService(interfaceName);
             log.info("开始调用{} 处理请求{}",service, rpcRequest);
             Object result = requestHandler.handle(rpcRequest, service);
-            ChannelFuture future = channelHandlerContext.writeAndFlush(RPCResponse.success(result));
+            ChannelFuture future = ctx.writeAndFlush(RPCResponse.success(result));
             future.addListener(ChannelFutureListener.CLOSE);
         } finally {
             ReferenceCountUtil.release(rpcRequest);

@@ -11,8 +11,10 @@ import java.lang.reflect.Method;
 public class RequestHandler {
     public Object handle(RPCRequest rpcRequest, Object service) {
         Object result = null;
+        log.info("开始处理request.......");
         result = invokeTargetMethod(rpcRequest, service);
         log.info("服务:{} 成功调用方法:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
+        log.info("处理结束..............");
         return result;
     }
 
@@ -28,19 +30,8 @@ public class RequestHandler {
             for(int i = 0;i < params.length;i++){
                 params[i] = JSON.parseObject(String.valueOf(params[i]), clazzs[i]);
             }
-
             return method.invoke(service, params);
-
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            log.info((String) service);
-            log.info(String.valueOf(rpcRequest.getParameters()));
-            for(Object object : rpcRequest.getParameters()){
-                System.out.println(object);
-            }
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
